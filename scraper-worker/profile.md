@@ -1,0 +1,3 @@
+## About the developer
+
+29-year-old Belgian developer with 4 years Mendix/SAP experience, currently getting hands-on with AI-native development (Anthropic API, Claude Code). Building freelance AI consulting services targeting Belgian SMEs, with a clear go-to-market plan. Strengths: low-code, integrations, automation, and translating business problems into working prototypes fast — without over-engineering.
