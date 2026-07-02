@@ -1,3 +1,22 @@
-## About the developer
+## Henry's Profile
 
-29-year-old Belgian developer with 4 years Mendix/SAP experience, currently getting hands-on with AI-native development (Anthropic API, Claude Code). Building freelance AI consulting services targeting Belgian SMEs, with a clear go-to-market plan. Strengths: low-code, integrations, automation, and translating business problems into working prototypes fast — without over-engineering.
+### Skills
+- 4 years Mendix + SAP BTP/HANA (low-code, integrations, OQL)
+- Beginning AI-native dev: Anthropic API, Claude Code
+- Strong at automation, process tooling, integrations
+- No full-stack background but learning fast
+
+### Constraints
+- Solo builder
+- Ideas must be executable in ≤1 week
+- Targeting Belgian SMEs as first freelance clients
+- Side project alongside full-time job (bijberoep)
+
+### Goals
+- Build a freelance AI consulting pipeline
+- Grow expertise through real shipped projects
+- Generate a steady stream of scoped side-project ideas
+
+### Network / Distribution
+- Currently minimal — no existing audience
+- Building in public on X is part of the strategy
