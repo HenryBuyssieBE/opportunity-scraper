@@ -1,5 +1,6 @@
 const TOKEN_URL = "https://www.reddit.com/api/v1/access_token";
 const API_BASE = "https://oauth.reddit.com";
+const PUBLIC_BASE = "https://www.reddit.com";
 
 let cachedToken: { accessToken: string; expiresAt: number } | null = null;
 
@@ -67,6 +68,36 @@ export async function redditGet(path: string): Promise<unknown> {
 
   if (!response.ok) {
     throw new Error(`Reddit API request failed: ${response.status} ${path}`);
+  }
+
+  return response.json();
+}
+
+// No OAuth app yet? Reddit's public .json endpoints work without credentials
+// for read-only access to public subreddits. Temporary fallback only — Reddit
+// rate-limits/blocks unauthenticated traffic that looks automated, and their
+// API terms expect OAuth for any sustained automated polling. Switch fully to
+// redditGet() once REDDIT_CLIENT_ID/SECRET are in place.
+export function hasOAuthCredentials(): boolean {
+  return Boolean(
+    process.env.REDDIT_CLIENT_ID &&
+      process.env.REDDIT_CLIENT_SECRET &&
+      process.env.REDDIT_USERNAME &&
+      process.env.REDDIT_PASSWORD
+  );
+}
+
+export async function redditGetPublic(path: string): Promise<unknown> {
+  const userAgent = process.env.REDDIT_USER_AGENT || "opportunity-scraper-fallback/0.1";
+
+  const response = await fetch(`${PUBLIC_BASE}${path}`, {
+    headers: {
+      "User-Agent": userAgent,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`Reddit public JSON request failed: ${response.status} ${path}`);
   }
 
   return response.json();

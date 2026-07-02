@@ -1,4 +1,4 @@
-import { redditGet } from "./authClient.js";
+import { redditGet, redditGetPublic, hasOAuthCredentials } from "./authClient.js";
 import { SUBREDDITS } from "./subreddits.js";
 import type { RedditPost } from "./types.js";
 
@@ -18,7 +18,12 @@ interface RedditListingResponse {
 }
 
 async function fetchNewPostsForSubreddit(subreddit: string, limit: number): Promise<RedditPost[]> {
-  const response = (await redditGet(`/r/${subreddit}/new?limit=${limit}`)) as RedditListingResponse;
+  const path = `/r/${subreddit}/new`;
+  const query = `?limit=${limit}`;
+
+  const response = (hasOAuthCredentials()
+    ? await redditGet(`${path}${query}`)
+    : await redditGetPublic(`${path}.json${query}`)) as RedditListingResponse;
 
   return response.data.children.map(({ data }) => ({
     id: data.id,
