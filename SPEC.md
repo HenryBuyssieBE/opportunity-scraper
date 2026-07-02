@@ -53,7 +53,7 @@ All services packaged as Docker Compose, deployed to a small VPS (e.g. Hetzner C
 ## 4. Reddit Scraping
 
 - **Method:** Official Reddit API (OAuth `script` app type), polling new posts (and optionally top comments) since the last successful run.
-- **Scope (v1):** A curated, hardcoded list of 5–10 subreddits. Suggested starting list (tune after first runs): `r/SomebodyMakeThis`, `r/artificial`, `r/automation`, `r/SaaS`, `r/nocode`, `r/Entrepreneur`.
+- **Scope (v1):** A curated, hardcoded list of subreddits (tune after first runs): `r/SomebodyMakeThis, r/SaaS, r/Entrepreneur, r/startups, r/smallbusiness, r/SideProject, r/artificial, r/automation, r/nocode, r/freelance`.
 - **Cadence:** Every 6 hours via cron inside the worker container, plus a manual "Run now" trigger exposed as a button/API route in the dashboard.
 - **Dedup:** Track processed Reddit post IDs (and thread URLs) in a `seen_posts` table. Skip posts already processed. Basic keyword/title overlap check on new candidates against recent `opportunities` entries to catch near-duplicate ideas across subreddits (no embeddings/semantic dedup in v1 — noted as a v2 candidate).
 - **Data retention:** Do **not** persist full post/comment bodies. Store only: source URL, post title, subreddit, timestamp, and the AI-generated fields. The dashboard links out to Reddit for full context. This keeps storage light and avoids Reddit ToS/display-retention concerns.
@@ -126,7 +126,7 @@ This file is the single source of truth for "why Henry wins" reasoning — updat
 
 ## 10. Cost & Volume Estimates (v1)
 
-- ~5–10 subreddits, new-posts-only, polled every 6h → expect low tens of candidate posts per run.
+- 10 subreddits, new-posts-only, polled every 6h → expect low tens of candidate posts per run.
 - Stage 1 (Haiku) runs on every candidate — cheap, ~$1/1M input tokens.
 - Stage 2 (Sonnet 5, default) runs only on survivors — expect single-digit survivors per run in early tuning.
 - VPS: ~€4–5/month. Twilio WhatsApp: pay-per-message, negligible at this alert volume.

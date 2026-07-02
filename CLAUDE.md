@@ -43,3 +43,13 @@ Next.js dashboard reads Postgres as a read-only feed.
 ## Environment
 
 Config is via `.env` (see `.env.example` for the full list): Reddit OAuth credentials, `ANTHROPIC_API_KEY` + `FILTER_MODEL`/`ANALYSIS_MODEL`, `DATABASE_URL`, Twilio WhatsApp credentials, `SCRAPE_CRON_SCHEDULE`, `NEXT_PUBLIC_APP_URL`.
+
+- Postgres 16 running in container `opportunity-scraper-db` on port 5432
+- Not yet in Compose — standalone container for now, Compose comes in the docker/ phase
+
+## Commands
+- Start DB: `docker start opportunity-scraper-db`
+- Stop DB: `docker stop opportunity-scraper-db`
+- Wipe DB: `docker rm -f opportunity-scraper-db` (then re-run docker run command)
+- Run scraper worker: `cd scraper-worker && npm run dev` *(add when scaffolded)*
+- Run dashboard: `cd web && npm run dev` *(add when scaffolded)*
