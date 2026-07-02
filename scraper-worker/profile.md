@@ -19,4 +19,4 @@
 
 ### Network / Distribution
 - Currently minimal — no existing audience
-- Building in public on X is part of the strategy
+- Building in public on X is part of the strategyr
