@@ -1,9 +1,9 @@
 import { query } from "./pool.js";
 import type { OpportunityRow } from "./types.js";
 import type { Opportunity } from "../ai/types.js";
-import type { RedditPost } from "../reddit/types.js";
+import type { CandidatePost } from "../types.js";
 
-export async function insertOpportunity(opportunity: Opportunity, post: RedditPost): Promise<void> {
+export async function insertOpportunity(opportunity: Opportunity, post: CandidatePost): Promise<void> {
   await query(
     `INSERT INTO opportunities (
       source_url, subreddit, post_title, posted_at,

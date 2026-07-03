@@ -1,0 +1,44 @@
+services:
+  db:
+    image: postgres:16
+    env_file: ../.env
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      # Postgres runs every .sql file here alphabetically on first init only —
+      # fine for v1's two migrations; revisit with a real migration runner if
+      # schema changes need to apply to an existing volume.
+      - ../db/migrations:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  scraper-worker:
+    build: ../scraper-worker
+    env_file: ../.env
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+    ports:
+      - "4000:4000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  web:
+    build: ../web
+    env_file: ../.env
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+      SCRAPER_WORKER_URL: http://scraper-worker:4000
+      # Pinned explicitly: `next start` honors $PORT, and the shared .env's
+      # WORKER_PORT is scraper-worker's, not this service's.
+      PORT: 3000
+    ports:
+      - "3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  db_data:

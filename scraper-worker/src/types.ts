@@ -1,4 +1,4 @@
-export interface RedditPost {
+export interface CandidatePost {
   id: string;
   title: string;
   selftext: string;

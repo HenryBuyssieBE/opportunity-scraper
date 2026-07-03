@@ -1,5 +1,5 @@
 import { anthropic } from "./client.js";
-import type { RedditPost } from "../reddit/types.js";
+import type { CandidatePost } from "../types.js";
 import type { Stage1Result } from "./types.js";
 
 const STAGE1_SCHEMA = {
@@ -27,7 +27,7 @@ function requireEnv(name: string): string {
   return value;
 }
 
-export async function filterPost(post: RedditPost): Promise<Stage1Result> {
+export async function filterPost(post: CandidatePost): Promise<Stage1Result> {
   const model = requireEnv("FILTER_MODEL");
 
   const response = await anthropic.messages.create({

@@ -1,6 +1,6 @@
 import { anthropic } from "./client.js";
 import { getProfile } from "./profile.js";
-import type { RedditPost } from "../reddit/types.js";
+import type { CandidatePost } from "../types.js";
 import type { Opportunity } from "./types.js";
 
 const SCORE_FIELD = { type: "integer" as const };
@@ -75,12 +75,12 @@ function assertScoreInRange(value: number, field: string): void {
   }
 }
 
-export async function analyzePost(post: RedditPost): Promise<Opportunity> {
+export async function analyzePost(post: CandidatePost): Promise<Opportunity> {
   const model = requireEnv("ANALYSIS_MODEL");
 
   const response = await anthropic.messages.create({
     model,
-    max_tokens: 1024,
+    max_tokens: 2048,
     system: buildSystemPrompt(),
     messages: [
       {

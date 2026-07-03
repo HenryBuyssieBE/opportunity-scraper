@@ -1,1 +1,2 @@
-export { runScrape } from "./runScrape.js";
+export { runScrape, runScrapeOverPosts } from "./runScrape.js";
+export { mockPosts } from "./mockPosts.js";

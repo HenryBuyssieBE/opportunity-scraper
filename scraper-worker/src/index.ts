@@ -7,6 +7,7 @@ config({ path: "../.env" });
 // at import time (e.g. src/db/pool.ts building its connection string).
 const cron = (await import("node-cron")).default;
 const { runScrape } = await import("./jobs/index.js");
+const { startServer } = await import("./server.js");
 
 function requireEnv(name: string): string {
   const value = process.env[name];
@@ -23,5 +24,7 @@ cron.schedule(schedule, () => {
 });
 
 console.log(`Scraper worker started. Cron schedule: ${schedule}`);
+
+startServer();
 
 runScrape().catch((error) => console.error("Initial scrape run failed:", error));

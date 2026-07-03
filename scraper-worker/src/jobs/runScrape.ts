@@ -1,12 +1,13 @@
 import { fetchNewPosts } from "../reddit/index.js";
+import { fetchNewStories } from "../hackernews/index.js";
 import { filterPost, analyzePost } from "../ai/index.js";
 import { isSeen, markSeen, insertOpportunity, findRecentTitles, isDuplicateTitle } from "../db/index.js";
 import { sendAlert } from "./alert.js";
-import type { RedditPost } from "../reddit/types.js";
+import type { CandidatePost } from "../types.js";
 
 const ALERT_THRESHOLD = 8;
 
-async function processPost(post: RedditPost): Promise<void> {
+async function processPost(post: CandidatePost): Promise<void> {
   if (await isSeen(post.id)) {
     return;
   }
@@ -35,10 +36,8 @@ async function processPost(post: RedditPost): Promise<void> {
   }
 }
 
-export async function runScrape(): Promise<void> {
-  console.log("Starting scrape run...");
-  const posts = await fetchNewPosts();
-  console.log(`Fetched ${posts.length} candidate posts.`);
+export async function runScrapeOverPosts(posts: CandidatePost[]): Promise<void> {
+  console.log(`Processing ${posts.length} candidate posts.`);
 
   for (const post of posts) {
     try {
@@ -49,4 +48,22 @@ export async function runScrape(): Promise<void> {
   }
 
   console.log("Scrape run complete.");
+}
+
+function settledOrEmpty(result: PromiseSettledResult<CandidatePost[]>, sourceName: string): CandidatePost[] {
+  if (result.status === "rejected") {
+    console.error(`${sourceName} fetch failed:`, result.reason);
+    return [];
+  }
+  return result.value;
+}
+
+export async function runScrape(): Promise<void> {
+  console.log("Starting scrape run...");
+  const [redditResult, hnResult] = await Promise.allSettled([fetchNewPosts(), fetchNewStories()]);
+  const posts = [
+    ...settledOrEmpty(redditResult, "Reddit"),
+    ...settledOrEmpty(hnResult, "Hacker News"),
+  ];
+  await runScrapeOverPosts(posts);
 }

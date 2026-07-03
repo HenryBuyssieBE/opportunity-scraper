@@ -1,6 +1,6 @@
 import { redditGet, redditGetPublic, hasOAuthCredentials } from "./authClient.js";
 import { SUBREDDITS } from "./subreddits.js";
-import type { RedditPost } from "./types.js";
+import type { CandidatePost } from "../types.js";
 
 interface RedditListingResponse {
   data: {
@@ -17,7 +17,7 @@ interface RedditListingResponse {
   };
 }
 
-async function fetchNewPostsForSubreddit(subreddit: string, limit: number): Promise<RedditPost[]> {
+async function fetchNewPostsForSubreddit(subreddit: string, limit: number): Promise<CandidatePost[]> {
   const path = `/r/${subreddit}/new`;
   const query = `?limit=${limit}`;
 
@@ -35,7 +35,7 @@ async function fetchNewPostsForSubreddit(subreddit: string, limit: number): Prom
   }));
 }
 
-export async function fetchNewPosts(limit = 25): Promise<RedditPost[]> {
+export async function fetchNewPosts(limit = 25): Promise<CandidatePost[]> {
   const results = await Promise.all(
     SUBREDDITS.map((subreddit) => fetchNewPostsForSubreddit(subreddit, limit))
   );
